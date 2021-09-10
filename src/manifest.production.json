@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "stockupup",
     "description": "学习小组插件",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "browser_action": {
         "default_title": "study-group",
         "default_icon": "assets/logo.png",

@@ -1510,7 +1510,7 @@ const stockInfos = [
   { code: "sz002604", name: "*ST龙力", pyname: "stll" },
   { code: "sz002605", name: "姚记扑克", pyname: "yjpk" },
   { code: "sz002606", name: "大连电瓷", pyname: "dldc" },
-  { code: "sz002607", name: "亚夏汽车", pyname: "yxqc" },
+  { code: "sz002607", name: "中公教育", pyname: "zgjy" },
   { code: "sz002608", name: "江苏国信", pyname: "jsgx" },
   { code: "sz002609", name: "捷顺科技", pyname: "jskj" },
   { code: "sz002610", name: "爱康科技", pyname: "akkj" },

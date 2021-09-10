@@ -149,6 +149,9 @@ export default {
 
   methods: {
     handleOutSide() {
+      if(this.stocks[this.clickindex - 1] && this.stocks[this.clickindex - 1].stock_name && this.stocks[this.clickindex - 1].stock_name.length == 8){
+        this.stocks[this.clickindex - 1].stock_code = this.stocks[this.clickindex - 1].stock_name
+      }
       if (
         this.stocks.length &&
         this.stocks[this.clickindex - 1] &&
@@ -164,6 +167,9 @@ export default {
       // 点击当前行 退出
       if (this.clickindex == index + 1) {
         return;
+      }
+      if(this.isNew && this.stocks[this.stocks.length - 1].stock_name.length == 8){
+        this.stocks[this.clickindex - 1].stock_code = this.stocks[this.clickindex - 1].stock_name
       }
       // 点击其他行, 最后一行没有选择股票，退出
       if (this.isNew && !this.stocks[this.stocks.length - 1].stock_code) {
