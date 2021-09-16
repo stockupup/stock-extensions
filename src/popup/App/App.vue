@@ -58,7 +58,7 @@
             <template slot-scope="{ row, $index }">
               <div v-show="!(clickindex && isNew && clickindex == $index + 1)">{{ row.stock_name }}
                 <br />
-                <span :style="calcStyle(row,'singleProfit')">{{ row.singleProfit }}</span>
+                <span :style="calcStyle(row,'singleProfit')">{{ row.singleProfit.toFixed(2) }}</span>
               </div>
               <el-autocomplete width="160" v-show="clickindex && isNew && clickindex == $index + 1" :fetch-suggestions="querySearch" v-model="row.stock_name" :trigger-on-focus="false" @select="handleSelect" size="mini" placeholder="首字母/代码" popper-class="autocomplete"></el-autocomplete>
             </template>
@@ -430,7 +430,7 @@ export default {
       let rate = Number(row.todayProfit) / (Number(row.money)-Number(row.todayProfit)) * 100
       this.$set(row,'rate',rate)
       row.stocks.forEach(stockRow=>{
-        let singleProfit = (Number(stockRow.stockChangeAmt) * Number(stockRow.trans)).toFixed(2)
+        let singleProfit = (Number(stockRow.stockChangeAmt) * Number(stockRow.trans))
         this.$set(stockRow,'singleProfit',singleProfit)
       })
     })
