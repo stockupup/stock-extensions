@@ -40,7 +40,7 @@ function getCustomList() {
   return new Promise((resolve, reject) => {
     axios({
       method: "GET",
-      url: "http://47.241.69.206/api/v1/stock/query"
+      url: "http://139.9.181.248/api/v1/stock/query"
     })
       .then(data => {
         let temp = data.data.data;
@@ -85,6 +85,8 @@ function getProfit(arr, stockArr) {
       if (find) {
         stock.stock_name = find.stockName;
         stock.price = find.stockInfo.stockCurrPrice;
+        stock.stockChangeAmt = find.stockInfo.stockChangeAmt;
+        stock.stockChangeRate = find.stockInfo.stockChangeRate;
         // 实时持仓收益
         if (stock.price && stock.cost && stock.trans && Number(stock.cost)) {
           stock.money = (Number(stock.price) * Number(stock.trans)).toFixed(2);

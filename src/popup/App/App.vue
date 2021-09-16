@@ -28,7 +28,7 @@
     <div class="table-container">
       <div class="table-title">{{ command }}{{ isAll ? "" : "持仓详情" }}</div>
       <div v-show="isAll" style="padding:0 10px;">
-        <el-table :data="tableData" style="width: 100%;" max-height="350">
+        <el-table :data="tableData" style="width: 100%;" max-height="350" @row-click="parentRowClick">
           <el-table-column prop="name" label="账户" width="60"></el-table-column>
           <el-table-column prop="todayProfit" label="今日收益" align="right" sortable width="100">
             <template slot-scope="{ row }">
@@ -54,13 +54,23 @@
       </div>
       <div v-show="!isAll" style="padding:0 10px;">
         <el-table v-clickoutside="handleOutSide" @header-click="handleOutSide" :data="stocks" style="width: 100%;" max-height="350" @row-click="rowClick">
-          <el-table-column prop="name" label="股票信息" width="100">
+          <el-table-column prop="singleProfit" label="股票信息" sortable width="100">
             <template slot-scope="{ row, $index }">
-              <span v-show="!(clickindex && isNew && clickindex == $index + 1)">{{ row.stock_name }}</span>
+              <div v-show="!(clickindex && isNew && clickindex == $index + 1)">{{ row.stock_name }}
+                <br />
+                <span :style="calcStyle(row,'singleProfit')">{{ row.singleProfit }}</span>
+              </div>
               <el-autocomplete width="160" v-show="clickindex && isNew && clickindex == $index + 1" :fetch-suggestions="querySearch" v-model="row.stock_name" :trigger-on-focus="false" @select="handleSelect" size="mini" placeholder="首字母/代码" popper-class="autocomplete"></el-autocomplete>
             </template>
           </el-table-column>
           <el-table-column prop="price" label="现价" align="right" width="80">
+            <template slot-scope="{ row }">
+              <div :style="calcStyle(row,'stockChangeRate')">
+                {{ row.price }}
+                <br />
+                ({{ row.stockChangeRate }}%)
+              </div>
+            </template>
           </el-table-column>
           <el-table-column prop="cost" label="成本" align="right" width="80">
             <template slot-scope="{ row, $index }">
@@ -209,7 +219,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios({
           method: "POST",
-          url: "http://47.241.69.206/api/v1/stock/update",
+          url: "http://139.9.181.248/api/v1/stock/update",
           data: {
             currency: "CNY",
             holder_id: row.holder_id,
@@ -308,7 +318,7 @@ export default {
           return new Promise((resolve, reject) => {
             axios({
               method: "POST",
-              url: "http://47.241.69.206/api/v1/stock/clearance",
+              url: "http://139.9.181.248/api/v1/stock/clearance",
               data: {
                 currency: "CNY",
                 holder_id: row.holder_id,
@@ -349,6 +359,11 @@ export default {
       }
 
       this.command = command;
+    },
+
+    parentRowClick(row){
+      this.stocks = row.stocks;
+      this.command = row.name
     },
 
     handleSelect(item) {
@@ -414,6 +429,10 @@ export default {
     this.tableData.forEach(row=>{
       let rate = Number(row.todayProfit) / (Number(row.money)-Number(row.todayProfit)) * 100
       this.$set(row,'rate',rate)
+      row.stocks.forEach(stockRow=>{
+        let singleProfit = (Number(stockRow.stockChangeAmt) * Number(stockRow.trans)).toFixed(2)
+        this.$set(stockRow,'singleProfit',singleProfit)
+      })
     })
   }
 };
